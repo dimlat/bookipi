@@ -34,8 +34,12 @@ export const buyProduct = async (req, res) => {
         return res.status(400).send('Sold out');
     }
 
-    // queue
+    /* queue tanpa retry
     await queue.add('order', { userId });
+    */
+
+    // queue dengan retry
+    await queue.add('order', { userId }, { attempts: 3, backoff: 1000 });
 
     res.send('Order queued');
 };
