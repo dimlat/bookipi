@@ -25,10 +25,20 @@ services:
       - "6379:6379"
 
   worker:
-    build: ./worker
+    build: .
+    command: ["node", "worker/worker.js"]
     depends_on:
       - redis
   mongodb:
     image: mongo
     ports:
       - "27017:27017"
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
