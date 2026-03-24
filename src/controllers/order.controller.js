@@ -1,3 +1,5 @@
+import { keys } from '../services/flashSale.service.js';
+
 import Redis from 'ioredis';
 import { Queue } from 'bullmq';
 
@@ -6,10 +8,20 @@ const queue = new Queue('orders', { connection: redis });
 
 export const buyProduct = async (req, res) => {
     const userId = req.query.user || 'anon';
+    const userKey = keys.userBought(userId);
+
+    const productId = req.query.product || 'product1';
+    const stockKey = keys.stock(productId);
+
+    const alreadyBought = await redis.get(userKey);
+
+    if (alreadyBought) {
+        return res.status(400).send('Already bought');
+    }
 
     // 1 user = 1 order
     const lock = await redis.set(
-        `lock:${userId}`,
+        keys.lock(userId),
         '1',
         'NX',
         'EX',
@@ -21,16 +33,16 @@ export const buyProduct = async (req, res) => {
     }
 
     // rate limit
-    const count = await redis.incr(`req:${userId}`);
+    const count = await redis.incr(keys.rateLimit(userId));
     if (count > 5) {
         return res.status(429).send('Too many requests');
     }
 
     // stock check
-    const stock = await redis.decr('stock:product1');
+    const stock = await redis.decr(stockKey);
 
     if (stock < 0) {
-        await redis.incr('stock:product1');
+        await redis.incr(stockKey);
         return res.status(400).send('Sold out');
     }
 
