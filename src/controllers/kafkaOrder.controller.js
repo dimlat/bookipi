@@ -24,9 +24,9 @@ const connectProducer = async () => {
 };
 
 await connectProducer();
-export const buyProduct = async (req, res) => {
+export const buyProductKafka = async (req, res) => {
     console.log('Received order request for Kafka:', req.query);
-    const userId = req.query.user || 'anon';
+    const userId = req.query.user || Math.floor(Math.random() * 1000000);
     const userKey = keys.userBought(userId);
 
     const productId = req.query.product || 'product1';
@@ -78,5 +78,5 @@ export const buyProduct = async (req, res) => {
         ]
     });
 
-    res.send('Order queued');
+    res.send('Queued via Kafka');
 };
