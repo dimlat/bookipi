@@ -32,9 +32,9 @@ const worker = new Worker(
          * To simulate real-world conditions, we randomly throw an error to test the retry mechanism.
          */
         // 🎲 50% gagal
-        if (Math.random() < 0.8) {
-            throw new Error('💥 Random failure');
-        }
+        // if (Math.random() < 0.8) {
+        //     throw new Error('💥 Random failure');
+        // }
 
         // DB writing
         try {
