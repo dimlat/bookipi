@@ -1,5 +1,5 @@
 # Docker down and up
-docker compose down
+docker compose down -v
 docker compose up --build
 # Check container yang aktif
 docker ps
@@ -40,3 +40,6 @@ http://localhost:8080/api
 
 # testing
 for i in {1..10}; do curl "http://localhost:8080/api/buy?user=$i"; done
+
+# test
+npx autocannon -c 100 -d 10 http://localhost:8080/api/buy-bull
