@@ -26,3 +26,17 @@ docker exec -it loadbalancer-kafka-1 bash
 /opt/kafka/bin/kafka-topics.sh \
   --list \
   --bootstrap-server localhost:9092
+
+## Dashboard
+# monggodb
+http://localhost:8081/db/shop/orders
+# bull dashboard
+http://localhost:8080/admin/queues
+# kafka
+http://localhost:8082
+
+# test dari browser
+http://localhost:8080/api
+
+# testing
+for i in {1..10}; do curl "http://localhost:8080/api/buy?user=$i"; done
