@@ -1,6 +1,6 @@
 import express from 'express';
 import { getMessage } from '../controllers/api.controller.js';
-import { buyProduct } from '../controllers/order.controller.js';
+import { buyProduct } from '../controllers/kafkaOrder.controller.js';
 
 const router = express.Router();
 
