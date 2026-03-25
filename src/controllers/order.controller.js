@@ -6,8 +6,8 @@ import { Queue } from 'bullmq';
 const redis = new Redis({ host: 'redis' });
 const queue = new Queue('orders', { connection: redis });
 
-export const buyProduct = async (req, res) => {
-    const userId = req.query.user || 'anon';
+export const buyProductBull = async (req, res) => {
+    const userId = req.query.user || Math.floor(Math.random() * 1000000);
     const userKey = keys.userBought(userId);
 
     const productId = req.query.product || 'product1';
@@ -53,5 +53,5 @@ export const buyProduct = async (req, res) => {
     // queue dengan retry
     await queue.add('order', { userId }, { attempts: 3, backoff: 1000 });
 
-    res.send('Order queued');
+    res.send('Queued via BullMQ');
 };
