@@ -1,17 +1,9 @@
-import mongoose from 'mongoose';
 import { Kafka } from 'kafkajs';
+import { keys } from '../src/services/flashSale.service.js';
+import { connectDB } from '../src/config/db.js';
+import redis from "../src/lib/redis.js";
 
-await mongoose.connect('mongodb://mongodb:27017/shop');
-
-const OrderSchema = new mongoose.Schema({
-    userId: String,
-    productId: String,
-    createdAt: { type: Date, default: Date.now }
-});
-
-OrderSchema.index({ userId: 1, productId: 1 }, { unique: true });
-
-const Order = mongoose.model('Order', OrderSchema);
+import Order from '../src/models/Order.js';
 
 const kafka = new Kafka({
     clientId: 'app',
@@ -42,10 +34,19 @@ await consumer.run({
         console.log('📥 Event:', event);
 
         if (event.type === 'ORDER_CREATED') {
+            await connectDB();
+            
             // simpan ke Mongo
-            console.log('ORDER_CREATED event received, saving to MongoDB...');
-            console.log('Event data:', event);
             await Order.create(event);
+            const userKey = keys.userBought(event.userId);
+            // tandai user sudah beli
+            await redis.set(userKey, '1', 'EX', 3600);
+            const order = {
+                userId: event.userId,
+            };
+
+            // simpan ke Redis list
+            await redis.lpush('purchases', JSON.stringify(order));
         }
     }
 });
