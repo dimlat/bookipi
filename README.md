@@ -9,6 +9,8 @@ node seed.js
 curl --location 'http://localhost:8080/api/buy?user=aria' -> via Kafka
 curl --location 'http://localhost:8080/api/buy-bull?user=ari' -> via BullMQ
 
+## You can see the diagram in root called SystemDiagramBullMQVersion.png
+
 # System Diagram BullMQ Version
 ## Layer 1 — Docker Environment (big box)
 🐳 Docker Network
