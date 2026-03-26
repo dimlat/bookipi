@@ -55,4 +55,10 @@ router.post("/stock", async (req, res) => {
   });
 });
 
+router.get('/purchases', async (req, res) => {
+  const list = await redis.lrange('purchases', 0, 20);
+  const parsed = list.map(item => JSON.parse(item));
+  res.json(parsed.reverse());
+});
+
 export default router;
