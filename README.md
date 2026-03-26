@@ -1,3 +1,4 @@
+Github URL: https://github.com/dimlat/bookipi
 ### HOW TO RUN Docker
 in root run docker compose up --build
 ### HOW TO RUN Frontend
@@ -107,7 +108,7 @@ npx autocannon -c 100 -d 10 http://localhost:8080/api/buy -> for Kafka
 
 k6 allows more realistic and customizable load testing scenarios.
 
-#### Example script (`k6.js`):
+#### Example script (`k6.js`): look at test.js inside k6 folder
 
 ```js
 import http from 'k6/http';
@@ -116,19 +117,6 @@ export const options = {
   vus: 100,          // number of virtual users
   duration: '10s',   // test duration
 };
-
-export default function () {
-  http.post(
-    'http://nginx/api/buy',
-    JSON.stringify({
-      userId: Math.floor(Math.random() * 1000).toString(),
-      productId: 'flash_sale_item'
-    }),
-    {
-      headers: { 'Content-Type': 'application/json' },
-    }
-  );
-}
 ```
 #### Run test (via Docker):
 docker compose run k6 run /scripts/k6.js
