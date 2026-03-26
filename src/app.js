@@ -5,9 +5,15 @@ import { Queue } from 'bullmq';
 import Redis from 'ioredis';
 import express from 'express';
 import apiRoutes from './routes/api.routes.js';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 const redis = new Redis({ host: 'redis' });
 const queue = new Queue('orders', { connection: redis });
