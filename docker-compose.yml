@@ -73,3 +73,10 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
     depends_on:
       - kafka
+  k6:
+    image: grafana/k6
+    volumes:
+      - ./k6:/scripts
+    entrypoint: ["k6", "run", "/scripts/test.js"]
+    depends_on:
+      - nginx
