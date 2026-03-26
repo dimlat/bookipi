@@ -3,6 +3,7 @@ import { useState } from "react";
 export default function BuyButton({ stock, isLive }) {
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState(null);
+    const [username, setUsername] = useState("");
 
     const isOutOfStock = !stock || stock <= 0;
 
@@ -12,13 +13,20 @@ export default function BuyButton({ stock, isLive }) {
     };
 
     const handleBuy = async (type) => {
+        if (!username.trim()) {
+            showToast("⚠️ Please enter username", "error");
+            return;
+        }
+
         try {
             setLoading(true);
 
-            const url =
+            const baseUrl =
                 type === "kafka"
                     ? "http://localhost:8080/api/buy"
                     : "http://localhost:8080/api/buy-bull";
+
+            const url = `${baseUrl}?user=${encodeURIComponent(username)}`;
 
             const res = await fetch(url);
             const text = await res.text();
@@ -42,7 +50,7 @@ export default function BuyButton({ stock, isLive }) {
 
     return (
         <>
-            {/* 🔥 TOAST TOP */}
+            {/* TOAST */}
             {toast && (
                 <div style={{
                     position: "fixed",
@@ -56,19 +64,38 @@ export default function BuyButton({ stock, isLive }) {
                     borderRadius: "10px",
                     boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
                     fontWeight: "bold",
-                    zIndex: 999,
-                    animation: "slideDown 0.3s ease"
+                    zIndex: 999
                 }}>
                     {toast.msg}
                 </div>
             )}
+
+            {/* USER INPUT */}
+            <div style={{ textAlign: "center", marginBottom: 15 }}>
+                <input
+                    type="text"
+                    placeholder="Enter username..."
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    style={{
+                        padding: "10px",
+                        borderRadius: "8px",
+                        border: "none",
+                        width: 220,
+                        background: "#2a2a3d",
+                        color: "white",
+                        outline: "none",
+                        textAlign: "center"
+                    }}
+                />
+            </div>
 
             {/* BUTTONS */}
             <div style={{
                 display: "flex",
                 gap: 12,
                 justifyContent: "center",
-                marginTop: 20
+                marginTop: 10
             }}>
                 <button
                     onClick={() => handleBuy("kafka")}
