@@ -8,7 +8,7 @@ export default function FlashSaleTimer({ setIsLive }) {
         endAt: null
     });
 
-    // 🔥 fetch flash sale tiap 5 detik
+    // fetch flash sale every 5 seconds
     useEffect(() => {
         const fetchSale = async () => {
             try {
@@ -34,7 +34,7 @@ export default function FlashSaleTimer({ setIsLive }) {
             });
     }, []);
 
-    // 🔥 ticking clock
+    // ticking clock
     useEffect(() => {
         const interval = setInterval(() => {
             setNow(Date.now() + offset);
@@ -66,7 +66,7 @@ export default function FlashSaleTimer({ setIsLive }) {
         setIsLive(isLive);
     }, [isLive, setIsLive]);
 
-    // ⛔ belum ada data
+    // No data
     if (!startAt || !endAt) {
         return (
             <div style={styles.card}>
@@ -75,7 +75,7 @@ export default function FlashSaleTimer({ setIsLive }) {
         );
     }
 
-    // ⏱️ format waktu (mm:ss)
+    // time format (mm:ss)
     const formatTime = (ms) => {
         const totalSec = Math.floor(ms / 1000);
         const m = Math.floor(totalSec / 60);
