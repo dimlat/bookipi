@@ -2,10 +2,10 @@ import { createBullBoard } from '@bull-board/api';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import { Queue } from 'bullmq';
-import Redis from 'ioredis';
 import express from 'express';
 import apiRoutes from './routes/api.routes.js';
 import cors from 'cors';
+import redis from "./lib/redis.js";
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,6 @@ app.use(cors({
   credentials: true
 }));
 
-const redis = new Redis({ host: 'redis' });
 const queue = new Queue('orders', { connection: redis });
 
 // setup server adapter

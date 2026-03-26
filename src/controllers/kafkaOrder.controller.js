@@ -1,10 +1,6 @@
 import { keys } from '../services/flashSale.service.js';
 import { Kafka } from 'kafkajs';
-
-
-import Redis from 'ioredis';
-
-const redis = new Redis({ host: 'redis' });
+import redis from "../lib/redis.js";
 
 const kafka = new Kafka({
     clientId: 'app',

@@ -1,6 +1,4 @@
-import Redis from 'ioredis';
-
-const redis = new Redis({ host: 'redis' });
+import redis from "./src/lib/redis.js";
 
 await redis.set('stock:product1', 100000);
 // TTL

@@ -1,9 +1,8 @@
 import { keys } from '../services/flashSale.service.js';
 
-import Redis from 'ioredis';
+import redis from "../lib/redis.js";
 import { Queue } from 'bullmq';
 
-const redis = new Redis({ host: 'redis' });
 const queue = new Queue('orders', { connection: redis });
 
 export const buyProductBull = async (req, res) => {
