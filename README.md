@@ -2,7 +2,12 @@
 in root run docker compose up --build
 ### HOW TO RUN Frontend
 go to frontend folder, and type npm start
-
+### you can seed data to Redis by going to (once docker up)
+docker exec -it loadbalancer-backend1-1 sh
+node seed.js
+### then you can curl this
+curl --location 'http://localhost:8080/api/buy?user=aria' -> via Kafka
+curl --location 'http://localhost:8080/api/buy-bull?user=ari' -> via BullMQ
 
 # System Diagram BullMQ Version
 ## Layer 1 — Docker Environment (big box)
@@ -112,7 +117,7 @@ export const options = {
 
 export default function () {
   http.post(
-    'http://localhost:8080/api/order',
+    'http://nginx/api/buy',
     JSON.stringify({
       userId: Math.floor(Math.random() * 1000).toString(),
       productId: 'flash_sale_item'
