@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BuyButton from "./components/BuyButton";
 import FlashSaleTimer from "./components/FlashSaleTimer";
 import AdminPanel from "./components/AdminPanel";
+import PurchaseList from "./components/PurchaseList";
 
 function App() {
   const [stock, setStock] = useState(null);
@@ -30,7 +31,15 @@ function App() {
       <h3>Stock: {stock}</h3>
 
       <BuyButton stock={stock} isLive={isLive} />
-      <AdminPanel />
+      <div style={{
+        display: "flex",
+        gap: 30,
+        justifyContent: "center",
+        marginTop: 50
+      }}>
+        <AdminPanel />
+        <PurchaseList />
+      </div>
 
     </div>
   );
