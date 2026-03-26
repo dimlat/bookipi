@@ -77,6 +77,6 @@ services:
     image: grafana/k6
     volumes:
       - ./k6:/scripts
-    entrypoint: ["k6", "run", "/scripts/test.js"]
+    # entrypoint: ["k6", "run", "/scripts/test.js"]
     depends_on:
       - nginx
