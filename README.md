@@ -160,12 +160,6 @@ Queue ensures order consistency
 ⚠️ Trade-offs
 Redis is a single point of failure (no clustering yet)
 BullMQ not suitable for long-term event storage
-🚀 Future Improvements
-Add rate limiting per user
-Implement idempotency key
-Use Redis Lua script for atomic stock decrement
-Scale workers horizontally
-Add Redis clustering
 🎯 Expected Outcome
 No duplicate purchases
 Consistent stock handling
