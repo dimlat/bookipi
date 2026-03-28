@@ -1,56 +1,40 @@
-import { keys } from '../services/flashSale.service.js';
+// src/controllers/order.controller.js
 
-import redis from "../lib/redis.js";
-import { Queue } from 'bullmq';
+export const createOrderController = ({ orderService, redis }) => {
 
-const queue = new Queue('orders', { connection: redis });
+    const createHandler = ({ strategy, successMessage }) => {
+        return async (req, res) => {
+            try {
+                const userId =
+                    req.query.user || (await redis.incr("global:user:id"));
 
-export const buyProductBull = async (req, res) => {
-    const userId = req.query.user || Math.floor(Math.random() * 1000000);
-    const userKey = keys.userBought(userId);
+                const productId = req.query.product || "product1";
 
-    const productId = req.query.product || 'product1';
-    const stockKey = keys.stock(productId);
+                await orderService.processOrder({
+                    userId,
+                    productId,
+                    strategy
+                });
 
-    const alreadyBought = await redis.get(userKey);
+                return res.send(successMessage);
 
-    if (alreadyBought) {
-        return res.status(400).send('Already bought');
-    }
+            } catch (err) {
+                return res
+                    .status(err.status || 500)
+                    .send(err.message || "Internal server error");
+            }
+        };
+    };
 
-    // 1 user = 1 order
-    const lock = await redis.set(
-        keys.lock(userId),
-        '1',
-        'NX',
-        'EX',
-        10
-    );
+    return {
+        buyProductViaKafka: createHandler({
+            strategy: "kafka",
+            successMessage: "Queued via Kafka"
+        }),
 
-    if (!lock) {
-        return res.status(400).send('Already ordered');
-    }
-
-    // rate limit
-    const count = await redis.incr(keys.rateLimit(userId));
-    if (count > 5) {
-        return res.status(429).send('Too many requests');
-    }
-
-    // stock check
-    const stock = await redis.decr(stockKey);
-
-    if (stock < 0) {
-        await redis.incr(stockKey);
-        return res.status(400).send('Sold out');
-    }
-
-    /* queue tanpa retry
-    await queue.add('order', { userId });
-    */
-
-    // queue dengan retry
-    await queue.add('order', { userId }, { attempts: 3, backoff: 1000 });
-
-    res.send('Queued via BullMQ');
+        buyProductViaBull: createHandler({
+            strategy: "bull",
+            successMessage: "Queued via Bull"
+        })
+    };
 };
