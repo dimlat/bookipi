@@ -11,8 +11,8 @@ Github URL: https://github.com/dimlat/bookipi
 npm install
 ### HOW TO RUN Docker
 in root run docker compose up --build
-### HOW TO RUN Frontend
-go to frontend folder, and type npm start
+### HOW TO RUN Frontend ? Go to frontend folder, and type 
+npm start
 ### how to run test for backend
 docker exec -it bookipi-backend1-1 sh
 npm run test
