@@ -1,4 +1,4 @@
-import { Kafka } from "kafkajs";
+import { Kafka, Partitioners } from "kafkajs";
 
 export const createKafkaProducer = async () => {
     const kafka = new Kafka({
@@ -6,8 +6,10 @@ export const createKafkaProducer = async () => {
         brokers: ["kafka:9092"]
     });
 
-    const producer = kafka.producer();
-
+    const producer = kafka.producer({
+        createPartitioner: Partitioners.LegacyPartitioner
+    });
+    
     const connect = async () => {
         try {
             console.log("Connecting to Kafka...");

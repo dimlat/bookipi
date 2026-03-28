@@ -22,6 +22,11 @@
     "jest": {
         "testEnvironment": "node",
         "detectOpenHandles": true,
-        "forceExit": true
+        "forceExit": true,
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/frontend/",
+            "/k6/"
+        ]
     }
 }
