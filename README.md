@@ -4,7 +4,7 @@ in root run docker compose up --build
 ### HOW TO RUN Frontend
 go to frontend folder, and type npm start
 ### you can seed data to Redis by going to (once docker up)
-docker exec -it loadbalancer-backend1-1 sh
+docker exec -it bookipi-backend1-1 sh
 node seed.js
 ### then you can curl this
 curl --location 'http://localhost:8080/api/buy?user=aria' -> via Kafka
@@ -165,7 +165,7 @@ docker compose up --build
 ## Check container yang aktif
 docker ps
 ## Untuk melakukan Seed Data di Redis, masuk kedalam container
-docker exec -it loadbalancer-backend1-1 sh && node seed.js
+docker exec -it bookipi-backend1-1 sh && node seed.js
 ## liat log worker
 docker-compose logs -f worker
 docker compose logs -f -t worker
@@ -173,7 +173,7 @@ docker compose logs -f worker | grep Processing
 ## multi service monitoring
 docker compose logs -f nginx backend1 backend2 worker
 ## connect to kafka
-docker exec -it loadbalancer-kafka-1 bash
+docker exec -it bookipi-kafka-1 bash
 ## kafka create topics
 /opt/kafka/bin/kafka-topics.sh \
   --create \
@@ -201,7 +201,7 @@ http://localhost:8080/api
 for i in {1..10}; do curl "http://localhost:8080/api/buy?user=$i"; done
 
 ### Test Result for BullMQ
-LoadBalancer npx autocannon -c 100 -d 10 http://localhost:8080/api/buy-bull
+bookipi npx autocannon -c 100 -d 10 http://localhost:8080/api/buy-bull
 Running 10s test @ http://localhost:8080/api/buy-bull
 100 connections
 
@@ -225,7 +225,7 @@ Req/Bytes counts sampled once per second.
 57k requests in 10.01s, 20 MB read
 
 ### stress test with Kafka
-LoadBalancer npx autocannon -c 100 -d 10 http://localhost:8080/api/buy
+bookipi npx autocannon -c 100 -d 10 http://localhost:8080/api/buy
 Running 10s test @ http://localhost:8080/api/buy
 100 connections
 
