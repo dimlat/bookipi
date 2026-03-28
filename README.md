@@ -1,10 +1,23 @@
 Github URL: https://github.com/dimlat/bookipi
+### conclusion I choose using BullMQ instead Kafka, because it is more faster (detail BullMQ vs Kafka at the bottom of README)
+### This is stat of BullMQ
+┌─────────┬──────┬───────┬───────┬───────┬──────────┬──────────┬────────┐
+│ Stat    │ 2.5% │ 50%   │ 97.5% │ 99%   │ Avg      │ Stdev    │ Max    │
+├─────────┼──────┼───────┼───────┼───────┼──────────┼──────────┼────────┤
+│ Latency │ 3 ms │ 12 ms │ 60 ms │ 80 ms │ 16.98 ms │ 15.36 ms │ 163 ms │
+└─────────┴──────┴───────┴───────┴───────┴──────────┴──────────┴────────┘
+
+### HOW TO RUN? in the root folder of bookipi
+npm install
 ### HOW TO RUN Docker
 in root run docker compose up --build
 ### HOW TO RUN Frontend
 go to frontend folder, and type npm start
-### you can seed data to Redis by going to (once docker up)
+### how to run test for backend
 docker exec -it bookipi-backend1-1 sh
+npm run test
+### you can seed data to Redis by going to (once docker up)
+docker exec -it bookipi-backend1-1 sh (if not yet)
 node seed.js
 ### then you can curl this
 curl --location 'http://localhost:8080/api/buy?user=aria' -> via Kafka
