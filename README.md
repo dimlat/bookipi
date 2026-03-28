@@ -171,7 +171,7 @@ Stress testing helps validate:
 Using both tools provides confidence that the system is scalable, resilient, and production-ready.
 
 
-# SCRIPTS
+# SCRIPTS example
 ## Docker down and up
 docker compose down -v
 docker compose up --build
@@ -213,8 +213,45 @@ http://localhost:8080/api
 # easy testing
 for i in {1..10}; do curl "http://localhost:8080/api/buy?user=$i"; done
 
+### unit test and integration test
+docker exec -it bookipi-backend1-1 sh
+
+# npm run test
+
+> test
+> NODE_OPTIONS=--experimental-vm-modules jest
+
+(node:36) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ PASS  tests/order.service.test.js
+ PASS  tests/order.api.test.js
+  ● Console
+
+    console.log
+      Connecting to Kafka...
+
+      at log (src/infra/kafka/producer.js:15:21)
+
+    console.log
+      🧠 Redis connected
+
+      at EventEmitter.log (src/lib/redis.js:10:13)
+
+    console.log
+      Kafka connected
+
+      at log (src/infra/kafka/producer.js:17:21)
+
+
+Test Suites: 2 passed, 2 total
+Tests:       5 passed, 5 total
+Snapshots:   0 total
+Time:        0.584 s
+Ran all test suites.
+# exit
+
 ### Test Result for BullMQ
-bookipi npx autocannon -c 100 -d 10 http://localhost:8080/api/buy-bull
+npx autocannon -c 100 -d 10 http://localhost:8080/api/buy-bull
 Running 10s test @ http://localhost:8080/api/buy-bull
 100 connections
 
@@ -238,7 +275,7 @@ Req/Bytes counts sampled once per second.
 57k requests in 10.01s, 20 MB read
 
 ### stress test with Kafka
-bookipi npx autocannon -c 100 -d 10 http://localhost:8080/api/buy
+npx autocannon -c 100 -d 10 http://localhost:8080/api/buy
 Running 10s test @ http://localhost:8080/api/buy
 100 connections
 
